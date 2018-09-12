@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Survey Form</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type ="text/javascript">
+        $(document).ready(function(){
+
+            var socket = io();
+            socket.on('posting_form', function (data){
+                $("p").html(data.msg);
+                console.log(data.msg)
+            });
+
+            socket.on('number', function (data){
+                $("h5").html(data.num);
+                console.log(data.num)
+            })
+
+            $("button").click(function(){
+                socket.emit('ok', {name: $('#name').val(), location: $("#location").val(), language: $("#language").val(), comment: $("#comment").val()})
+                return false;
+            })
+                
+        })
+    </script>
+    <style>
+        textarea {
+            width: 250px;
+            height: 60px;
+        }
+    </style>
+</head>
+<body>
+    <p></p>
+    <h5></h5>
+    <form>
+        Your Name: <input type="text" id="name"><br>
+        Dojo Location:
+        <select id="location">
+            <option>Mountain View</option>
+            <option>Burbank</option>
+            <option>New York</option>
+            <option>Texas</option>
+        </select><br>
+        Favorite Language:
+        <select id="language">
+            <option>Javascript</option>
+            <option>Python</option>
+            <option>Java</option>
+            <option>MEAN</option>
+        </select><br>
+        Comment (optional):<br>
+        <textarea id="comment"></textarea><br>
+        <button>Submit</button>
+    </form>
+</body>
+</html>
